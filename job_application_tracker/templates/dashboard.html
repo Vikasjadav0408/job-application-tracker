@@ -1,0 +1,378 @@
+{% comment %} {% extends 'base.html' %}
+{% block content %} {% endcomment %}
+<html>
+<head>
+  <style>
+    /* All your CSS goes here */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f8f9fb;
+      color: #333;
+    }
+
+    .dashboard {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 250px;
+      background-color: #ffffff;
+      padding: 20px;
+      border-right: 1px solid #e0e0e0;
+      position: relative;
+    }
+
+    .sidebar h2 {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 30px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+    }
+
+    .sidebar ul li {
+      margin-bottom: 15px;
+    }
+
+    .sidebar ul li a {
+      text-decoration: none;
+      color: #333;
+      padding: 8px 12px;
+      display: block;
+      border-radius: 5px;
+    }
+
+    .sidebar ul li a:hover {
+      background-color: #f0f0f0;
+    }
+
+    .main {
+      flex: 1;
+      padding: 30px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .header h2 {
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .buttons button {
+      margin-left: 10px;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .btn-secondary {
+      background-color: #e4e7ec;
+      color: #333;
+    }
+
+    .btn-primary {
+      background-color: #4f46e5;
+      color: #fff;
+    }
+
+    .search-bar {
+      margin-bottom: 20px;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 10px 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 2px solid #e0e0e0;
+      margin-bottom: 20px;
+    }
+
+    .tabs a {
+      margin-right: 25px;
+      padding-bottom: 10px;
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      border-bottom: 2px solid transparent;
+    }
+
+    .tabs a:hover,
+    .tabs a.active {
+      border-color: #4f46e5;
+      color: #4f46e5;
+    }
+
+    .tabs a.active {
+      border-color: #4f46e5;
+      color: #4f46e5;
+    }
+
+    .application-card {
+      background-color: #ffffff;
+      padding: 16px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      margin-bottom: 15px;
+    }
+
+    .application-card h4 {
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    .application-card p {
+      font-size: 14px;
+      color: #555;
+    }
+
+    .application-card .status {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 4px 10px;
+      background-color: #e0e7ff;
+      color: #3730a3;
+      font-size: 12px;
+      border-radius: 20px;
+    }
+
+    .logout-btn {
+      position: absolute;
+      right: 20px;
+      bottom: 20px;
+      display: block;
+      width: calc(100% - 40px);
+      padding: 10px 0;
+      background: #f44336;
+      color: #fff !important;
+      text-align: center;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    .logout-btn:hover {
+      background: #d32f2f;
+      color: #fff;
+    }
+
+    /* Add custom styles for prettier buttons and file input */
+    .modal-footer .btn-primary {
+      background: linear-gradient(90deg, #6366f1 0%, #4f46e5 100%);
+      border: none;
+      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(99,102,241,0.08);
+      transition: background 0.2s;
+    }
+    .modal-footer .btn-primary:hover {
+      background: linear-gradient(90deg, #4f46e5 0%, #6366f1 100%);
+    }
+    .modal-footer .btn-secondary {
+      background: #e0e7ff;
+      color: #3730a3;
+      border: none;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .modal-footer .btn-secondary:hover {
+      background: #c7d2fe;
+      color: #3730a3;
+    }
+    .form-control[type="file"] {
+      border: 2px dashed #6366f1;
+      background: #f5f7ff;
+      padding: 10px;
+      border-radius: 8px;
+      transition: border-color 0.2s;
+    }
+    .form-control[type="file"]:focus {
+      border-color: #4f46e5;
+      outline: none;
+    }
+    .btn.btn-sm.btn-primary[data-bs-toggle="modal"] {
+      background: linear-gradient(90deg, #6366f1 0%, #4f46e5 100%);
+      border: none;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(99,102,241,0.08);
+      transition: background 0.2s;
+    }
+    .btn.btn-sm.btn-primary[data-bs-toggle="modal"]:hover {
+      background: linear-gradient(90deg, #4f46e5 0%, #6366f1 100%);
+    }
+  </style>
+</head>
+
+<body>
+<div class="dashboard">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Dashboard</h2>
+    <ul>
+      <li><a href="{% url 'dashboard_applied' %}">My Applications</a></li>
+      <li><a href="{% url 'dashboard_interview' %}">Interviews</a></li>
+      <li><a href="#" onclick="showProfile(event)">Profile</a></li>
+    </ul>
+    <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="header">
+      <div>
+        <h2>Your Applications</h2>
+        <p>Welcome back, {{ request.user.first_name|default:request.user.username|default:request.user.email }}</p>
+      </div>
+
+    </div>
+
+    <div class="tabs">
+      <a href="{% url 'dashboard_jobs' %}" class="{% if tab == 'jobs' %}active{% endif %}">Available Jobs ({{ jobs|length }})</a>
+      <a href="{% url 'dashboard_applied' %}" class="{% if tab == 'applied' %}active{% endif %}">Applied ({{ applied|length }})</a>
+      <a href="{% url 'dashboard_interview' %}" class="{% if tab == 'interview' %}active{% endif %}">Interview Scheduled ({{ interviewed|length }})</a>
+      <a href="{% url 'dashboard_offered' %}" class="{% if tab == 'offered' %}active{% endif %}">Offered ({{ offered|length }})</a>
+      <a href="{% url 'dashboard_rejected' %}" class="{% if tab == 'rejected' %}active{% endif %}">Rejected ({{ rejected|length }})</a>
+    </div>
+
+    {% if tab == 'jobs' %}
+    <div id="jobs">
+      <h3>Available Jobs</h3>
+      <div class="row g-5">
+      {% for job in jobs %}
+        <div class="col-md-6 mb-5 mt-3">
+          <div class="p-4 mb-2 bg-white rounded shadow" style="box-shadow: 0 2px 8px rgba(0,0,0,0.07);">
+            <h3 class="font-bold" style="font-size: 2rem;">{{ job.title }}</h3>
+            <p>{{ job.company }}</p>
+            <p>
+              {% if job.salary_min and job.salary_max %}
+                {{ job.salary_min|floatformat:0 }} to {{ job.salary_max|floatformat:0 }} LPA
+              {% elif job.salary_min %}
+                {{ job.salary_min|floatformat:0 }} LPA
+              {% elif job.salary_max %}
+                {{ job.salary_max|floatformat:0 }} LPA
+              {% else %}
+                Salary not specified
+              {% endif %}
+              · {{ job.level }} · {{ job.job_type }}
+            </p>
+            {% if job.id in user_applied_job_ids %}
+              <button class="btn btn-sm btn-secondary" disabled>Applied</button>
+              <br>
+            {% else %}
+              <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#applyModal{{ job.id }}">
+                Apply
+              </button>
+              <div class="modal fade" id="applyModal{{ job.id }}" tabindex="-1" aria-labelledby="applyModalLabel{{ job.id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <br>
+                      <h5 class="modal-title" id="applyModalLabel{{ job.id }}">Apply to {{ job.title }} at {{ job.company }}</h5>
+                    </div>
+                    <form method="post" action="{% url 'apply_job' job.id %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <div class="modal-body">
+                        <div class="mb-3">
+                          <label for="resume{{ job.id }}" class="form-label">Upload Resume</label>
+                          <input class="form-control" type="file" id="resume{{ job.id }}" name="resume" required>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Submit Application</button>
+                        <br>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% empty %}
+        <p>No jobs available.</p>
+      {% endfor %}
+      </div>
+    </div>
+    
+      {% elif tab == 'applied' %}
+    <div id="applied">
+      <h3>Applied</h3>
+      {% for app in applied %}
+        {% include 'application_card.html' with app=app %}
+      {% empty %}
+        <p>No applied jobs yet.</p>
+      {% endfor %}
+    </div>
+
+    {% elif tab == 'interview' %}
+      <div id="interview">
+        <h3>Interview Scheduled</h3>
+        {% for app in interviewed %}
+          {% include 'application_card.html' with app=app %}
+        {% empty %}
+          <p>No interviews scheduled.</p>
+        {% endfor %}
+      </div>
+    {% elif tab == 'offered' %}
+      <div id="offer">
+        <h3>Offered</h3>
+        {% for app in offered %}
+          {% include 'application_card.html' with app=app %}
+        {% empty %}
+          <p>No offers yet.</p>
+        {% endfor %}
+      </div>
+    {% elif tab == 'rejected' %}
+      <div id="rejected">
+        <h3>Rejected</h3>
+        {% for app in rejected %}
+          {% include 'application_card.html' with app=app %}
+        {% empty %}
+          <p>No rejections yet.</p>
+        {% endfor %}
+      </div>
+    {% elif tab == 'profile' %}
+    <div id="profile-section" style="max-width: 500px; margin: 0 auto; background: #fff; padding: 32px; border-radius: 12px; box-shadow: 0 4px 24px 0 rgba(0,0,0,0.08);">
+      <h3 style="text-align:center; color:#4f46e5;">Profile</h3>
+      <p><strong>Name:</strong> {{ request.user.get_full_name|default:request.user.username }}</p>
+      <p><strong>Email:</strong> {{ request.user.email }}</p>
+      <p><strong>Member since:</strong> {{ request.user.date_joined|date:"F j, Y" }}</p>
+      <p><strong>Applications submitted:</strong> {{ applied|length }}</p>
+      <p style="color: #888;">More features coming soon...</p>
+    </div>
+    {% endif %}
+
+    
+    </div>
+  </div>
+</div>
+
+<script>
+function showProfile(e) {
+  e.preventDefault();
+  window.location.href = '?tab=profile';
+}
+</script>
+</body>
+</html>
+{% comment %} {% endblock %} {% endcomment %}

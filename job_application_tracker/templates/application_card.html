@@ -1,0 +1,17 @@
+<div class="p-4 mb-2 bg-white rounded shadow">
+  <h4 class="font-bold">{{ app.job.title }}</h4>
+  <p>{{ app.job.company }}</p>
+  <p>
+    {% if app.job.salary_min and app.job.salary_max %}
+      {{ app.job.salary_min|floatformat:0 }} to {{ app.job.salary_max|floatformat:0 }} LPA
+    {% elif app.job.salary_min %}
+      {{ app.job.salary_min|floatformat:0 }} LPA
+    {% elif app.job.salary_max %}
+      {{ app.job.salary_max|floatformat:0 }} LPA
+    {% else %}
+      Salary not specified
+    {% endif %}
+    · {{ app.job.level }} · {{ app.job.job_type }}
+  </p>
+  <span class="px-2 py-1 text-sm bg-gray-200 rounded">{{ app.get_status_display }}</span>
+</div>
